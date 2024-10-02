@@ -5,9 +5,21 @@ export default function TodoOptions({
 	handleMarkAllAsIncompleted,
 	handleDeleteAllCompleted,
 	handleResetTodos,
+	handleImportTodos,
+	handleExportTodos,
 }) {
 	return (
 		<div className='todo-options flex flex-col'>
+			<Button
+				text='Import Todos'
+				buttonType='secondary'
+				handleClick={handleImportTodos}
+			/>
+			<Button
+				text='Export Todos'
+				buttonType='secondary'
+				handleClick={handleExportTodos}
+			/>
 			<Button
 				text='Mark all as completed'
 				buttonType='secondary'

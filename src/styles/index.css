@@ -108,6 +108,7 @@ body {
 
 .todo-options {
 	gap: 5px;
+	margin-top: 5px;
 }
 
 @media screen and (max-width: 768px) {
@@ -117,11 +118,14 @@ body {
 
 	.sidebar {
 		width: 100%;
+		justify-content: end;
 	}
 
 	.todo-list {
 		width: 100%;
 		border-bottom: 1px solid black;
+		height: 200px;
+		padding-bottom: 100px;
 	}
 }
 

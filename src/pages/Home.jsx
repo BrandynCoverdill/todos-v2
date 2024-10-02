@@ -1,17 +1,19 @@
+// @ts-nocheck
 // The homepage of the app
 import '../styles/index.css';
 import StatusBar from '../components/StatusBar';
 import SideBar from '../components/SideBar';
 import TodoList from '../components/TodoList';
-import { useState } from 'react';
 import TodoItem from '../components/TodoItem';
 import AddTodoForm from '../components/AddTodoForm';
 import TodoOptions from '../components/TodoOptions';
-import { getCompletedTodos } from '../utils/util';
+import {
+	getCompletedTodos,
+	checkIfJsonFile,
+	validateJsonStructure,
+} from '../utils/util';
 import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '../utils/hooks';
-
-// TODO: Create a custom hook for todo state and use localstorage to persist the state
 
 export default function Home() {
 	const [todos, setTodos] = useLocalStorage('todos', [
@@ -71,6 +73,91 @@ export default function Home() {
 		setTodos(newTodos);
 	};
 
+	const handleImportTodos = () => {
+		// Create a 'input' element
+		const input = document.createElement('input');
+
+		// Set its type
+		input.type = 'file';
+
+		// Set it's accepted file types
+		input.accept = '.json';
+
+		// Apply a style to prevent its display
+		input.style.display = 'none';
+
+		// Listen for the 'change' event
+		input.addEventListener('change', (e) => {
+			// Get the file
+			const file = e.target.files[0];
+
+			// Check if the file is a valid JSON file
+			if (!checkIfJsonFile(file)) {
+				return;
+			}
+
+			// Use FileReader to read the file
+			const reader = new FileReader();
+
+			// Read the file
+			reader.readAsText(file);
+
+			reader.onload = async (e) => {
+				// Parse the JSON
+				const data = await JSON.parse(e.target.result);
+
+				// Check if the JSON is valid
+				if (!validateJsonStructure(data)) {
+					alert('Invalid JSON file');
+					return;
+				}
+
+				// Set the state
+				setTodos(data);
+			};
+		});
+
+		// Attach it to the document
+		document.body.appendChild(input);
+
+		// Click it
+		input.click();
+
+		// Remove it from the document
+		document.body.removeChild(input);
+	};
+
+	const handleExportTodos = () => {
+		// JSON object is converted to a string. null and 2 are used for indentation.
+		const jsonString = JSON.stringify(todos, null, 2);
+
+		// Create a Blob with the data we want to download as a file
+		const blob = new Blob([jsonString], { type: 'application/json' });
+
+		// Create a link to download it
+		const href = URL.createObjectURL(blob);
+
+		// Create a "a" element to be used as a clickable link
+		const link = document.createElement('a');
+
+		// Clicking the link triggers the download
+		link.href = href;
+
+		// Name of the file
+		link.download = 'todos.json';
+
+		// Add the link to the DOM
+		document.body.appendChild(link);
+
+		// Click the link
+		link.click();
+
+		// Cleanup
+		document.body.removeChild(link);
+
+		console.log('Exported:\n', jsonString);
+	};
+
 	return (
 		<div className='home-container'>
 			<StatusBar items={todos}>
@@ -101,6 +188,8 @@ export default function Home() {
 						handleMarkAllAsCompleted={handleMarkAllAsCompleted}
 						handleMarkAllAsIncompleted={handleMarkAllAsIncompleted}
 						handleResetTodos={() => setTodos([])}
+						handleImportTodos={handleImportTodos}
+						handleExportTodos={handleExportTodos}
 					/>
 				</SideBar>
 			</section>
