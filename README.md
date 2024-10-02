@@ -1,23 +1,3 @@
-# React Template
+# Todos V2
 
-This template provides a fast way to start creating new apps with React.
-
-## Installed Packages
-
-This template has the following packages installed:
-
-- @emotion/react
-- @emotion/styled
-- @mui/icons-material
-- @mui/lab
-- @mui/material
-- react-router-dom
-
-## Use / Run template
-
-To use/run this template, run the following commands:
-
-```
-npm i
-npm run dev
-```
+[View the live site here](https://brandyn-todos-v2.netlify.app)
