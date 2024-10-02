@@ -9,24 +9,15 @@ import AddTodoForm from '../components/AddTodoForm';
 import TodoOptions from '../components/TodoOptions';
 import { getCompletedTodos } from '../utils/util';
 import { v4 as uuidv4 } from 'uuid';
+import { useLocalStorage } from '../utils/hooks';
 
 // TODO: Create a custom hook for todo state and use localstorage to persist the state
 
 export default function Home() {
-	const [todos, setTodos] = useState([
+	const [todos, setTodos] = useLocalStorage('todos', [
 		{
 			id: uuidv4(),
-			text: 'Todo 1 has a very long text that should wrap as it gets longer and longer',
-			isCompleted: false,
-		},
-		{
-			id: uuidv4(),
-			text: 'Todo 2',
-			isCompleted: false,
-		},
-		{
-			id: uuidv4(),
-			text: 'Todo 3',
+			text: "To complete a todo, click on it's text!",
 			isCompleted: false,
 		},
 	]);
