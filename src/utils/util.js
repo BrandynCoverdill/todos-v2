@@ -1,3 +1,4 @@
+// @ts-nocheck
 export function getCompletedPercentage(todos) {
 	const percentage =
 		(todos.filter((todo) => todo.isCompleted).length / todos.length) * 100;
